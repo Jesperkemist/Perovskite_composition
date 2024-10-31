@@ -1,6 +1,59 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/perovskite_composition_schema.json",
+    "$defs": {
+        "ion": {
+            "$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"
+        },
+        "impurity": {
+            "type": "object",
+            "properties": {
+                "function": {
+                    "type": "string",
+                    "description": "The function of the additive or impurity in the film."
+                },
+                "abbreviation": {
+                    "type": "string",
+                    "description": "The abbreviation used for the additive or impurity."
+                },
+                "concentration": {
+                    "type": "number",
+                    "description": "The concentration of the additive or impurity.",
+                    "unit": "cm^-3"
+                },
+                "molecular_formula": {
+                    "type": "string",
+                    "description": "The Molecular formula which indicates the numbers of each type of atom in a molecule, with no information about the structure."
+                },
+                "smile": {
+                    "type": "string",
+                    "description": "The canonical SMILE string of the additive or impurity."
+                },
+                "common_name": {
+                    "type": "string",
+                    "description": "The common or trivial name of the additive or impurity."
+                },
+                "iupac_name": {
+                    "type": "string",
+                    "description": "The preferred systematic IUPAC name of the additive or impurity."
+                },
+                "cas_number": {
+                    "type": "string",
+                    "description": "The CAS number for the additive or impurity."
+                }
+            },
+            "required": [
+                "function",
+                "abbreviation",
+                "concentration",
+                "molecular_formula",
+                "smile",
+                "common_name",
+                "iupac_name",
+                "cas_number"
+            ]
+        }
+    },
     "type": "object",
     "properties": {
         "long_form": {
@@ -39,90 +92,41 @@
             "type": "array",
             "description": "A list of dictionaries on the form [{key_1: value_1, key_2: value_2, …}, {key_1: value_1,  …}, …]. Each element in the list represents one A-site ion in the perovskite structure. Each ion is given its own dictionary with the keys listed below.",
             "items": {
-                "$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"
+                "$ref": "#/$defs/ion"
             }
         },
         "b_ions": {
             "type": "array",
             "description": "Same structure as the a_ions",
             "items": {
-                "$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"
+                "$ref": "#/$defs/ion"
             }
         },
         "x_ions": {
             "type": "array",
             "description": "Same structure as the a_ions",
             "items": {
-                "$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"
+                "$ref": "#/$defs/ion"
             }
         },
-        "additives_and_impurities": {
+        "impurities": {
             "type": "array",
             "description": "A list of dictionaries on the form: [{key_1: value_1, key_2: value_2, …}, {key_1: value_1,  …}, …]. Each element in the list represents a dictionary with one component that is present in the film but not incorporated into the perovskite crystal structure. Keywords in the dictionaries include: the concentration, the function in the film, i.e. if it is to be considered as a secondary phase, an additive, a dopant or an impurity, and data to uniquely identify the compound including the same key value pairs found in the sections for perovskite ions.",
             "items": {
-                "type": "object",
-                "properties": {
-                    "function": {
-                        "type": "string",
-                        "description": "The function of the additive or impurity in the film."
-                    },
-                    "abbreviation": {
-                        "type": "string",
-                        "description": "The abbreviation used for the additive or impurity."
-                    },
-                    "concentration": {
-                        "type": "number",
-                        "description": "The concentration of the additive or impurity."
-                    },
-                    "concentration_metric": {
-                        "type": "string",
-                        "description": "The metric used for the concentration of the additive or impurity."
-                    },
-                    "molecular_formula": {
-                        "type": "string",
-                        "description": "The Molecular formula which indicates the numbers of each type of atom in a molecule, with no information about the structure."
-                    },
-                    "smile": {
-                        "type": "string",
-                        "description": "The canonical SMILE string of the additive or impurity."
-                    },
-                    "common_name": {
-                        "type": "string",
-                        "description": "The common or trivial name of the additive or impurity."
-                    },
-                    "iupac_name": {
-                        "type": "string",
-                        "description": "The preferred systematic IUPAC name of the additive or impurity."
-                    },
-                    "cas_number": {
-                        "type": "string",
-                        "description": "The CAS number for the additive or impurity."
-                    }
-                },
-                "required": [
-                    "function",
-                    "abbreviation",
-                    "concentration",
-                    "concentration_metric",
-                    "molecular_formula",
-                    "smile",
-                    "common_name",
-                    "iupac_name",
-                    "cas_number"
-                ]
+                "$ref": "#/$defs/impurity"
+            }
+        },
+        "additives": {
+            "type": "array",
+            "description": "A list of dictionaries on the form: [{key_1: value_1, key_2: value_2, …}, {key_1: value_1,  …}, …]. Each element in the list represents a dictionary with one component that is present in the film but not incorporated into the perovskite crystal structure. Keywords in the dictionaries include: the concentration, the function in the film, i.e. if it is to be considered as a secondary phase, an additive, a dopant or an impurity, and data to uniquely identify the compound including the same key value pairs found in the sections for perovskite ions.",
+            "items": {
+                "$ref": "#/$defs/impurity"
             }
         }
     },
     "required": [
-        "long_form",
-        "short_form",
-        "composition_estimate",
-        "sample_type",
-        "dimensionality",
-        "bandgap",
         "a_ions",
         "b_ions",
-        "x_ions",
-        "additives_and_impurities"
+        "x_ions"
     ]
 }

@@ -56,14 +56,14 @@
     },
     "required": [
         "abbreviation",
-        "coefficient",
-        "molecular_formula",
-        "smile",
-        "common_name",
-        "iupac_name",
-        "cas_number",
-        "source_compound_smile",
-        "source_compound_iupac_name",
-        "source_compound_cas_number"
+        "coefficient"
+    ],
+    "anyOf": [
+        {
+            "required": ["molecular_formula"]
+        },
+        {
+            "required": ["smile"]
+        }
     ]
 }
