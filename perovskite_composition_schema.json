@@ -1,0 +1,128 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/perovskite_composition_schema.json",
+    "type": "object",
+    "properties": {
+        "long_form": {
+            "type": "string",
+            "description": "The perovskite composition according to IUPAC recommendations, where standard abbreviations are used for all ions. A-ions are listed in alphabetic order, followed by the B-ions in alphabetics order, followed by the X-ions in alphabetic order, all with their stochiometric coefficients. For increased clarity, we recommend enclosing all ions whose abbreviations are 3 letters or longer in parentheses.",
+            "examples": ["Cs0.05FA0.78MA0.17PbBr0.5I2.5"]
+        },
+        "short_form": {
+            "type": "string",
+            "description": "The long_form stripped of the numeric coefficients. This is a useful key for searching and grouping perovskite data.",
+            "examples": ["CsFAMAPbBrI"]
+        },
+        "composition_estimate": {
+            "type": "string",
+            "description": "A categorical description of how the composition is estimated. Standard options include: “Estimated from precursor solutions”, “Literature value”, “Estimated from XRD data”, “Estimated from spectroscopic data”, and “Theoretical simulation”.",
+            "examples": ["Estimated from precursor solutions", "Literature value", "Estimated from XRD data", "Estimated from spectroscopic data", "Theoretical simulation"]
+        },
+        "sample_type": {
+            "type": "string",
+            "description": "A categorical description of the type of sample the data describes. Standard options include: “Polycrystalline film”, “Single crystal”, “Quantum dots”, “Nano rods”, and “Colloidal solution”.",
+            "examples": ["Polycrystalline film", "Single crystal", "Quantum dots", "Nano rods", "Colloidal solution"]
+        },
+        "dimensionality": {
+            "type": "string",
+            "description": "A categorical description of the dimensionality of the perovskite. Standard options include: “0D”, “1D”, “2D”, “3D”, “2D/3D”. “2D/3D” refers to a situation where a 2D phase is intermixed with a 3D phase but where the overall composition is given by the value in long_form.",
+            "examples": ["0D", "1D", "2D", "3D", "2D/3D"]
+        },
+        "bandgap": {
+            "type": "number",
+            "minimum": 0,
+            "description": "The band gap of the perovskite expressed in electron volt. Details of how the band gap is estimated is suggested to be encapsulated in a separate data schema.",
+            "examples": [1.63],
+            "unit": "eV"
+        },
+        "a_ions": {
+            "type": "array",
+            "description": "A list of dictionaries on the form [{key_1: value_1, key_2: value_2, …}, {key_1: value_1,  …}, …]. Each element in the list represents one A-site ion in the perovskite structure. Each ion is given its own dictionary with the keys listed below.",
+            "items": {
+                "$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"
+            }
+        },
+        "b_ions": {
+            "type": "array",
+            "description": "Same structure as the a_ions",
+            "items": {
+                "$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"
+            }
+        },
+        "x_ions": {
+            "type": "array",
+            "description": "Same structure as the a_ions",
+            "items": {
+                "$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"
+            }
+        },
+        "additives_and_impurities": {
+            "type": "array",
+            "description": "A list of dictionaries on the form: [{key_1: value_1, key_2: value_2, …}, {key_1: value_1,  …}, …]. Each element in the list represents a dictionary with one component that is present in the film but not incorporated into the perovskite crystal structure. Keywords in the dictionaries include: the concentration, the function in the film, i.e. if it is to be considered as a secondary phase, an additive, a dopant or an impurity, and data to uniquely identify the compound including the same key value pairs found in the sections for perovskite ions.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "function": {
+                        "type": "string",
+                        "description": "The function of the additive or impurity in the film."
+                    },
+                    "abbreviation": {
+                        "type": "string",
+                        "description": "The abbreviation used for the additive or impurity."
+                    },
+                    "concentration": {
+                        "type": "number",
+                        "description": "The concentration of the additive or impurity."
+                    },
+                    "concentration_metric": {
+                        "type": "string",
+                        "description": "The metric used for the concentration of the additive or impurity."
+                    },
+                    "molecular_formula": {
+                        "type": "string",
+                        "description": "The Molecular formula which indicates the numbers of each type of atom in a molecule, with no information about the structure."
+                    },
+                    "smile": {
+                        "type": "string",
+                        "description": "The canonical SMILE string of the additive or impurity."
+                    },
+                    "common_name": {
+                        "type": "string",
+                        "description": "The common or trivial name of the additive or impurity."
+                    },
+                    "iupac_name": {
+                        "type": "string",
+                        "description": "The preferred systematic IUPAC name of the additive or impurity."
+                    },
+                    "cas_number": {
+                        "type": "string",
+                        "description": "The CAS number for the additive or impurity."
+                    }
+                },
+                "required": [
+                    "function",
+                    "abbreviation",
+                    "concentration",
+                    "concentration_metric",
+                    "molecular_formula",
+                    "smile",
+                    "common_name",
+                    "iupac_name",
+                    "cas_number"
+                ]
+            }
+        }
+    },
+    "required": [
+        "long_form",
+        "short_form",
+        "composition_estimate",
+        "sample_type",
+        "dimensionality",
+        "bandgap",
+        "a_ions",
+        "b_ions",
+        "x_ions",
+        "additives_and_impurities"
+    ]
+}
