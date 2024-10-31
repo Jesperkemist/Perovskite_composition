@@ -18,9 +18,9 @@
             "description": "The Molecular formula which indicates the numbers of each type of atom in a molecule, with no information about the structure.",
             "examples": ["Cs+", "CH5N2+", " C8H12N+", "Pb2+"]
         },
-        "smile": {
+        "smiles": {
             "type": "string",
-            "description": "The canonical SMILE string of the ion. With this data, the organic ions can easily be visualised or used in computational software.",
+            "description": "The canonical SMILES string of the ion. With this data, the organic ions can easily be visualised or used in computational software.",
             "examples": ["[Cs+]", "C(=[NH2+])N", "C1=CC=C(C=C1)CC[NH3+]", "[Pb+2]"]
         },
         "common_name": {
@@ -38,9 +38,9 @@
             "description": "The CAS number for the ion. There are cases where CAS numbers not yet have been defined.",
             "examples": ["18459-37-5", "17000-00-9"]
         },
-        "source_compound_smile": {
+        "source_compound_smiles": {
             "type": "string",
-            "description": "The smile of the neutral parent or source compound. The source compound can vary and is thus not unique, but having data for a neutral source compound solves several problems. It deals with the ambiguity of the charge for diamines, which can be either +1 or +2, CAS numbers are more often defined for source compounds than for their ions, and it provides an entry point to what often is a commercially available starting material in the synthesis. For tertiary amines, there is no unique parent compound, but the I, Br, or Cl salts can often take that role.",
+            "description": "The SMILES of the neutral parent or source compound. The source compound can vary and is thus not unique, but having data for a neutral source compound solves several problems. It deals with the ambiguity of the charge for diamines, which can be either +1 or +2, CAS numbers are more often defined for source compounds than for their ions, and it provides an entry point to what often is a commercially available starting material in the synthesis. For tertiary amines, there is no unique parent compound, but the I, Br, or Cl salts can often take that role.",
             "examples": ["[Cs]", "C(=N)N", "C1=CC=C(C=C1)CCN"]
         },
         "source_compound_iupac_name": {
@@ -63,7 +63,7 @@
             "required": ["molecular_formula"]
         },
         {
-            "required": ["smile"]
+            "required": ["smiles"]
         }
     ]
 }

@@ -25,9 +25,9 @@
                     "type": "string",
                     "description": "The Molecular formula which indicates the numbers of each type of atom in a molecule, with no information about the structure."
                 },
-                "smile": {
+                "smiles": {
                     "type": "string",
-                    "description": "The canonical SMILE string of the additive or impurity."
+                    "description": "The canonical SMILES string of the additive or impurity."
                 },
                 "common_name": {
                     "type": "string",
@@ -50,7 +50,7 @@
                     "required": ["molecular_formula"]
                 },
                 {
-                    "required": ["smile"]
+                    "required": ["smiles"]
                 }
             ]
         }
