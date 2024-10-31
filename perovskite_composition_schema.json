@@ -14,20 +14,25 @@
                 },
                 "abbreviation": {
                     "type": "string",
-                    "description": "The abbreviation used for the additive or impurity."
+                    "description": "The abbreviation used for the additive or impurity.",
+                    "examples": ["RbI", "Fe"]
                 },
                 "concentration": {
                     "type": "number",
+                    "minimum": 0,
                     "description": "The concentration of the additive or impurity.",
-                    "unit": "cm^-3"
+                    "unit": "cm^-3",
+                    "examples": [1.0e16]
                 },
                 "molecular_formula": {
                     "type": "string",
-                    "description": "The Molecular formula which indicates the numbers of each type of atom in a molecule, with no information about the structure."
+                    "description": "The Molecular formula which indicates the numbers of each type of atom in a molecule, with no information about the structure.",
+                    "examples": ["RbI", "Fe2+"]
                 },
                 "smiles": {
                     "type": "string",
-                    "description": "The canonical SMILES string of the additive or impurity."
+                    "description": "The canonical SMILES string of the additive or impurity.",
+                    "examples": ["[Rb+].[I-]", "[Fe+2]"]
                 },
                 "common_name": {
                     "type": "string",
@@ -35,11 +40,13 @@
                 },
                 "iupac_name": {
                     "type": "string",
-                    "description": "The preferred systematic IUPAC name of the additive or impurity."
+                    "description": "The preferred systematic IUPAC name of the additive or impurity.",
+                    "examples": ["rubidium(1+);iodide", "iron(2+)"]
                 },
                 "cas_number": {
                     "type": "string",
-                    "description": "The CAS number for the additive or impurity."
+                    "description": "The CAS number for the additive or impurity.",
+                    "examples": ["7790-29-6", "1317-63-1"]
                 }
             },
             "required": [
