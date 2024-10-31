@@ -43,14 +43,15 @@
                 }
             },
             "required": [
-                "function",
-                "abbreviation",
-                "concentration",
-                "molecular_formula",
-                "smile",
-                "common_name",
-                "iupac_name",
-                "cas_number"
+                "abbreviation"
+            ],
+            "anyOf": [
+                {
+                    "required": ["molecular_formula"]
+                },
+                {
+                    "required": ["smile"]
+                }
             ]
         }
     },
