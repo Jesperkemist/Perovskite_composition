@@ -27,10 +27,6 @@
         "impurity": {
             "type": "object",
             "properties": {
-                "function": {
-                    "type": "string",
-                    "description": "The function of the additive or impurity in the film."
-                },
                 "abbreviation": {
                     "type": "string",
                     "description": "The abbreviation used for the additive or impurity.",
@@ -39,9 +35,17 @@
                 "concentration": {
                     "type": "number",
                     "minimum": 0,
-                    "description": "The concentration of the additive or impurity.",
+                    "description": "The concentration of the additive or impurity in atoms per cubic centimeters.",
                     "unit": "cm^-3",
                     "examples": [1.0e16]
+                },
+                "mass_fraction": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "The mass fraction of the additive or impurity in the film.",
+                    "unit": "g/g",
+                    "examples": [0.01]
                 },
                 "molecular_formula": {
                     "type": "string",
