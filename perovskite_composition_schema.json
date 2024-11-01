@@ -3,7 +3,26 @@
     "$id": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/perovskite_composition_schema.json",
     "$defs": {
         "ion": {
-            "$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"
+            "allOf": [{"$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"}],
+            "properties": {
+                "coefficient": {
+                    "type": "string",
+                    "description": "The stoichiometric coefficient of the ion. Implemented as a string such as “0.75”, or “1-x”. The rationale for representing the coefficients as strings and not as floating-point numbers is to allow for situations where the coefficients are unknown.",
+                    "examples": ["0.75", "1-x"]
+                }
+            },
+            "required": [
+                "abbreviation",
+                "coefficient"
+            ],
+            "anyOf": [
+                {
+                    "required": ["molecular_formula"]
+                },
+                {
+                    "required": ["smiles"]
+                }
+            ]
         },
         "impurity": {
             "type": "object",
@@ -49,10 +68,16 @@
                     "examples": ["7790-29-6", "1317-63-1"]
                 }
             },
-            "required": [
-                "abbreviation"
-            ],
             "anyOf": [
+                {
+                    "required": ["abbreviation"]
+                },
+                {
+                    "required": ["iuapc_name"]
+                },
+                {
+                    "required": ["cas_number"]
+                },
                 {
                     "required": ["molecular_formula"]
                 },
