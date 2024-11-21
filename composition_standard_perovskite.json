@@ -1,20 +1,20 @@
 {
-    "long_form": "Cs0.05FA0.18MA0.79PbBr0.5I2.5",
-    "short_form": "CsFAMAPbBrI",
+    "long_form": "Cs0.05FA0.18MA0.79Br0.5I2.5",
+    "short_form": "CsFAMABrI",
     "composition_estimate": "Estimated from precursor solutions",
     "sample_type": "Polycrystalline film",
     "dimensionality": "3D",
-    "bandgap": 1.63,
-    "a_ions": [
+    "band_gap": 1.55,
+    "ions_a_site": [
         {
             "abbreviation": "Cs",
             "coefficient": "0.05",
             "molecular_formula": "Cs+",
-            "smile": "[Cs+]",
+            "smiles": "[Cs+]",
             "common_name": "Cesium ion",
             "iupac_name": "Cesium(1+)",
             "cas_number": "18459-37-5",
-            "source_compound_smile": "[Cs]",
+            "source_compound_smiles": "[Cs]",
             "source_compound_iupac_name": "Cesium",
             "source_compound_cas_number": "7440-46-2"
         },
@@ -22,10 +22,10 @@
             "abbreviation": "FA",
             "coefficient": "0.18",
             "molecular_formula": "CH5N2+",
-            "smile": "C(=[NH2+])N",
+            "smiles": "C(=[NH2+])N",
             "common_name": "Formamidinium",
             "iupac_name": "aminomethylideneazanium",
-            "source_compound_smile": "C(=N)N",
+            "source_compound_smiles": "C(=N)N",
             "source_compound_iupac_name": "methanimidamide",
             "source_compound_cas_number": "463-52-5"
         },
@@ -33,39 +33,25 @@
             "abbreviation": "MA",
             "coefficient": "0.79",
             "molecular_formula": "CH6N+",
-            "smile": "C[NH3+]",
+            "smiles": "C[NH3+]",
             "common_name": "Methylammonium",
             "iupac_name": "methylazanium",
             "cas_number": "17000-00-9",
-            "source_compound_smile": "CN",
+            "source_compound_smiles": "CN",
             "source_compound_iupac_name": "methanamine",
             "source_compound_cas_number": "74-89-5"
         }
     ],
-    "b_ions": [
-        {
-            "abbreviation": "Pb",
-            "coefficient": "1",
-            "molecular_formula": "Pb2+",
-            "smile": "[Pb+2]",
-            "common_name": "Lead",
-            "iupac_name": "lead(2+)",
-            "cas_number": "14280-50-3",
-            "source_compound_smile": "[Pb]",
-            "source_compound_iupac_name": "Lead",
-            "source_compound_cas_number": "7439-92-1"
-        }
-    ],
-    "x_ions": [
+    "ions_x_site": [
         {
             "abbreviation": "Br",
             "coefficient": "0.5",
             "molecular_formula": "Br-",
-            "smile": "[Br-]",
+            "smiles": "[Br-]",
             "common_name": "Bromide",
             "iupac_name": "Bromide",
             "cas_number": "24959-67-9",
-            "source_compound_smile": "BrBr",
+            "source_compound_smiles": "BrBr",
             "source_compound_iupac_name": "molecular bromine",
             "source_compound_cas_number": "7726-95-6"
         },
@@ -73,37 +59,24 @@
             "abbreviation": "I",
             "coefficient": "2.5",
             "molecular_formula": "I-",
-            "smile": "[I-]",
+            "smiles": "[I-]",
             "common_name": "Iodide",
             "iupac_name": "Iodide",
             "cas_number": "20461-54-5",
-            "source_compound_smile": "II",
+            "source_compound_smiles": "II",
             "source_compound_iupac_name": "molecular iodine",
             "source_compound_cas_number": "7553-56-2"
         }
     ],
-    "additives_and_impurities": [
+    "additives": [
         {
-            "function": "Additive",
-            "abbreviation": "RbI",
-            "concentration": 0.1,
-            "concentration_metric": "wt %",
-            "molecular_formula": "RbI",
-            "smile": "[Rb+].[I-]",
-            "common_name": "Rubidium iodide",
-            "iupac_name": "rubidium(1+);iodide",
-            "cas_number": "7790-29-6"
-        },
-        {
-            "function": "Impurity",
-            "abbreviation": "Fe2+",
-            "concentration": 0.001,
-            "concentration_metric": "mol %",
-            "molecular_formula": "Fe2+",
-            "smile": "[Fe+2]",
-            "common_name": "Iron(2+)",
-            "iupac_name": "iron(2+)",
-            "cas_number": "1317-63-1"
+            "abbreviation": "PbI2",
+            "mass_fraction": 0.03,
+            "molecular_formula": "PbI2",
+            "smiles": "I[Pb]I",
+            "common_name": "Lead(II) iodide",
+            "iupac_name": "diiodolead",
+            "cas_number": "10101-63-0"
         }
     ]
 }

@@ -43,12 +43,10 @@ class CompoundData(ctk.CTkFrame):
         self.compound.grid(row=0, column=1, padx=10, pady=(10, 0), sticky="w")
 
 class GetAdditivesData(ctk.CTkFrame):
-    def __init__(self, master, title="Title", values=[], additive_type=[], conc_metrics=[]):
+    def __init__(self, master, title="Title", values=[]):
         super().__init__(master) 
         self.title = title
         self.values = values
-        self.additive_type = additive_type
-        self.conc_metrics = conc_metrics
 
         self.title = ctk.CTkLabel(self, text=self.title, fg_color="gray30", corner_radius=6, font=new_font)
         self.title.grid(row=0, column=0, columnspan=2, padx=10, pady=(10, 0), sticky="ew")
@@ -75,7 +73,7 @@ class GetAdditivesData(ctk.CTkFrame):
 
     def add_input_field(self):
         row = len(self.input_fields)
-        input_field = AdditiveData(self.entries_frame, row, self.values, self.additive_type, self.conc_metrics)
+        input_field = AdditiveData(self.entries_frame, row, self.values)
         self.input_fields.append(input_field)
 
     def remove_input_field(self):
@@ -85,28 +83,25 @@ class GetAdditivesData(ctk.CTkFrame):
 
     def get(self):
         additives = []
-        function = []
         concentration = []
-        concentration_metric = []
+        mass_fractions = []
         for element in self.input_fields:
             if element.abbreviation.get().strip() != "":
                 additives.append(element.abbreviation.get().strip())
-                function.append(element.function.get().strip())
+                mass_fractions.append(element.mass_fractions.get().strip())
                 concentration.append(element.concentration.get().strip())
-                concentration_metric.append(element.concentration_metrics.get().strip())
 
         for i, conc in enumerate(concentration):
             if "," in conc:
                 concentration[i] = conc.replace(",", ".")
-        
-        return additives, function, concentration, concentration_metric
+
+        return additives, concentration, mass_fractions
     
     def clear(self):
         for element in self.input_fields:
             element.abbreviation.set("")
-            element.function.set("")
-            element.concentration_metrics.set("")
-            element.concentration.delete(0, tk.END) 
+            element.concentration.delete(0, tk.END)
+            element.mass_fractions.delete(0, tk.END)  
     
 class GetFileName(ctk.CTkFrame):
     def __init__(self, master, title, text):
@@ -279,11 +274,10 @@ class IonData(ctk.CTkFrame):
         self.coefficient.grid(row=0, column=2, padx=10, pady=(10, 0), sticky="w")
 
 class AdditiveData(ctk.CTkFrame):
-    def __init__(self, master, row, values, functions, conc_metrics):
+    def __init__(self, master, row, values):
+    # def __init__(self, master, row, values, functions, conc_metrics):
         super().__init__(master)
         self.values = values
-        self.functions = functions
-        self.conc_metrics = conc_metrics
 
         self.frame = ctk.CTkFrame(master, fg_color="transparent")
         self.frame.grid(row=row, column=0, padx=10, pady=(10, 0), sticky="ew")
@@ -292,31 +286,15 @@ class AdditiveData(ctk.CTkFrame):
         self.title.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="ew") 
         
         self.abbreviation = ctk.CTkComboBox(self.frame, font=new_font, variable="")
-        self.abbreviation.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="w")
+        self.abbreviation.grid(row=0, column=1, padx=10, pady=(10, 0), sticky="w")
         values = [""] + self.values
         CTkScrollableDropdown(self.abbreviation, values=values, justify="left", button_color="transparent", autocomplete=True) 
 
-        self.title_2 = ctk.CTkLabel(self.frame, text=f"function {row + 1}", fg_color="gray30", corner_radius=6, font=new_font)
-        self.title_2.grid(row=0, column=1, padx=10, pady=(10, 0), sticky="ew") 
-
-        self.function = ctk.CTkComboBox(self.frame, font=new_font, variable="",)
-        self.function.grid(row=1, column=1, padx=10, pady=(10, 0), sticky="w")
-        functions = [""] + self.functions
-        CTkScrollableDropdown(self.function, values=functions, justify="left", button_color="transparent", autocomplete=True) 
-
-        self.title_3 = ctk.CTkLabel(self.frame, text=f"Cons. {row + 1}", fg_color="gray30", corner_radius=6, font=new_font)
-        self.title_3.grid(row=0, column=2, padx=10, pady=(10, 0), sticky="ew") 
+        self.mass_fractions = ctk.CTkEntry(self.frame, placeholder_text="Mass fraction", font=new_font)
+        self.mass_fractions.grid(row=0, column=2, padx=10, pady=(10, 0), sticky="w")
         
-        self.concentration = ctk.CTkEntry(self.frame, placeholder_text="Concentration", font=new_font)
-        self.concentration.grid(row=1, column=2, padx=10, pady=(10, 0), sticky="w")
-
-        self.title_4 = ctk.CTkLabel(self.frame, text=f"Cons. Metric {row + 1}", fg_color="gray30", corner_radius=6, font=new_font)
-        self.title_4.grid(row=0, column=3, padx=10, pady=(10, 0), sticky="ew")
-
-        self.concentration_metrics = ctk.CTkComboBox(self.frame, font=new_font, variable="")
-        self.concentration_metrics.grid(row=1, column=3, padx=10, pady=(10, 0), sticky="w")
-        conc_metrics = [""] + self.conc_metrics
-        CTkScrollableDropdown(self.concentration_metrics, values=conc_metrics, justify="left", button_color="transparent", autocomplete=True) 
+        self.concentration = ctk.CTkEntry(self.frame, placeholder_text=f"Cons. [/cm³]", font=new_font)
+        self.concentration.grid(row=0, column=3, padx=10, pady=(10, 0), sticky="w")
 
 class SaveFolder(ctk.CTkFrame):
     def __init__(self, master, button_text, text, command):
@@ -443,12 +421,15 @@ class App(ctk.CTk):
         self.X_ions = GetIonsData(self.content_frame, title="X-ions", values=x_ions_from_database)
         self.X_ions.grid(row=10, column=0, padx=10, pady=(10, 0), sticky="nsw")        
 
-        # Additives and impurities
-        self.additives = GetAdditivesData(self.content_frame, title="Additives and Impurities", 
-                                        values=additives_from_database,
-                                        additive_type = default_values.additive_type(), 
-                                        conc_metrics = default_values.additive_concentration_metrics())
+        # Additives
+        self.additives = GetAdditivesData(self.content_frame, title="Additives", 
+                                        values=additives_from_database)
         self.additives.grid(row=11, column=0, padx=10, pady=(10, 0), sticky="nsw") 
+
+        # Impurities
+        self.impurities = GetAdditivesData(self.content_frame, title="Impurities", 
+                                        values=additives_from_database)
+        self.impurities.grid(row=12, column=0, padx=10, pady=(10, 0), sticky="nsw") 
 
     def _on_mouse_wheel(self, event):
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
@@ -463,6 +444,7 @@ class App(ctk.CTk):
         self.B_ions.clear()
         self.X_ions.clear()          
         self.additives.clear()
+        self.impurities.clear()
 
     def generate_json(self):
         "Put user data together in a json file"
@@ -481,7 +463,11 @@ class App(ctk.CTk):
         x_ions, x_coefficients = self.X_ions.get()
 
         # Additives
-        additives, function, concentration, concentration_metric = self.additives.get()
+        # additives, function, concentration, concentration_metric = self.additives.get()
+        additives, additives_concentrations, additives_mass_fractions = self.additives.get()
+
+        # Impurities
+        impurities, impurities_concentrations, impurities_mass_fractions = self.impurities.get() 
 
         # Generate and save the perovskite object as json
         perovskite = PerovskiteToJson(
@@ -494,11 +480,13 @@ class App(ctk.CTk):
             b_ions_abbreviations=b_ions, 
             b_coefficients=b_coefficients, 
             x_ions_abbreviations=x_ions, 
-            x_coefficients=x_coefficients,
+            x_coefficients=x_coefficients,          
             additives_abbreviations = additives,
-            additives_functions = function,
-            additives_concentrations = concentration,
-            additives_conc_met = concentration_metric,
+            additives_concentrations = additives_concentrations,
+            additives_mass_fractions = additives_mass_fractions,       
+            impurities_abbreviations = impurities,
+            impurities_concentrations = impurities_concentrations,
+            impurities_mass_fractions = impurities_mass_fractions,         
             path_to_reference_data='local', 
             save_path=save_path,
             save=True)

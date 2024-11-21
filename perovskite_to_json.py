@@ -6,6 +6,7 @@ T. Jesper Jacobsson 2024 10
 The background is described in the paper ...
 """
 
+import math
 import os
 from itertools import zip_longest
 
@@ -23,10 +24,13 @@ class PerovskiteToJson:
         dimensionality="",
         bandgap="",
         additives = [],
+        impurities = [],
         additives_abbreviations = [],
         additives_concentrations = [],
-        additives_functions = [],
-        additives_conc_met = [],
+        additives_mass_fractions = [],
+        impurities_abbreviations = [],
+        impurities_concentrations = [],
+        impurities_mass_fractions = [],
         a_ions_abbreviations=[], 
         a_coefficients=[], 
         b_ions_abbreviations=[], 
@@ -36,17 +40,20 @@ class PerovskiteToJson:
         path_to_reference_data='local',       
         save_path="",
         save=True):
-    
+
         # initiate variables
         self.composition_estimate = composition_estimate
         self.sample_type = sample_type
         self.dimensionality = dimensionality
         self.bandgap = bandgap
         self.additives = additives
+        self.impurities = impurities
         self.additives_abbreviations = additives_abbreviations
         self.additives_concentrations = additives_concentrations
-        self.additives_functions = additives_functions
-        self.additives_conc_met = additives_conc_met
+        self.additives_mass_fractions = additives_mass_fractions
+        self.impurities_abbreviations = impurities_abbreviations
+        self.impurities_concentrations = impurities_concentrations
+        self.impurities_mass_fractions = impurities_mass_fractions            
         self.a_ions_abbreviations = a_ions_abbreviations
         self.a_coefficients = a_coefficients
         self.b_ions_abbreviations = b_ions_abbreviations
@@ -72,9 +79,13 @@ class PerovskiteToJson:
         # Enforce proper formatting additives and impurities
         self.additives_abbreviations = self.clean_ions(self.additives_abbreviations)
         self.additives_concentrations = self.format_list_of_numbers(self.additives_concentrations)
-        self.additives_functions = self.format_list_of_strings(self.additives_functions)
-        self.additives_conc_met = self.format_list_of_strings(self.additives_conc_met)
+        self.additives_mass_fractions = self.format_list_of_numbers(self.additives_mass_fractions)
+        self.impurities_abbreviations = self.clean_ions(self.impurities_abbreviations)
+        self.impurities_concentrations = self.format_list_of_numbers(self.impurities_concentrations)
+        self.impurities_mass_fractions = self.format_list_of_numbers(self.impurities_mass_fractions)       
+    
         self.additives_sort()
+        self.impurities_sort()
         
         # Sort ions in alphabetic order
         self.a_ions_abbreviations, self.a_coefficients = self.sort_ions(self.a_ions_abbreviations, self.a_coefficients)
@@ -94,7 +105,7 @@ class PerovskiteToJson:
         self.reference_data_a_ions = pd.read_excel(path_a_ions)
         self.reference_data_b_ions = pd.read_excel(path_b_ions)
         self.reference_data_x_ions = pd.read_excel(path_x_ions)
-        self.reference_data_additives = pd.read_excel(path_additives)
+        self.reference_data_additive_and_impurities = pd.read_excel(path_additives)
 
         # Format the dimensionality
         self.dimensionality = self.format_singel_string_values(self.dimensionality)
@@ -118,13 +129,21 @@ class PerovskiteToJson:
         # X ions
         self.format_ions_with_complementary_data(self.x_ions, self.x_ions_abbreviations, self.reference_data_x_ions, self.x_coefficients)
     
-        # Format the additives and impurities
+        # Format the additives
         self.format_additives_with_complementary_data(self.additives, 
                                                     self.additives_abbreviations, 
-                                                    self.reference_data_additives, 
-                                                    self.additives_functions , 
-                                                    self.additives_concentrations, 
-                                                    self.additives_conc_met)
+                                                    self.reference_data_additive_and_impurities, 
+                                                    self.additives_concentrations,
+                                                    self.additives_mass_fractions,                                                     
+                                                    )
+    
+        # Format the impurities
+        self.format_additives_with_complementary_data(self.impurities, 
+                                                    self.impurities_abbreviations, 
+                                                    self.reference_data_additive_and_impurities, 
+                                                    self.impurities_concentrations, 
+                                                    self.impurities_mass_fractions,
+                                                    )
     
         # Convert data to a Json-file
         self.json = self.convert_to_json()
@@ -146,11 +165,16 @@ class PerovskiteToJson:
     def additives_sort(self):
         "Ensure that all additive list have the same length"
         if len(self.additives_concentrations) < len(self.additives_abbreviations):
-            self.additives_concentrations.extend(["nan"] * (len(self.additives_abbreviations) - len(self.additives_concentrations)))        
-        if len(self.additives_functions) < len(self.additives_abbreviations):
-            self.additives_functions.extend(["nan"] * (len(self.additives_abbreviations) - len(self.additives_functions)))   
-        if len(self.additives_conc_met) < len(self.additives_abbreviations):
-            self.additives_conc_met.extend(["nan"] * (len(self.additives_abbreviations) - len(self.additives_conc_met)))               
+            self.additives_concentrations.extend(["nan"] * (len(self.additives_abbreviations) - len(self.additives_concentrations)))   
+        if len(self.additives_mass_fractions) < len(self.additives_abbreviations):
+            self.additives_mass_fractions.extend(["nan"] * (len(self.additives_abbreviations) - len(self.additives_mass_fractions)))   
+        
+    def impurities_sort(self):
+        "Ensure that all additive list have the same length"
+        if len(self.impurities_concentrations) < len(self.impurities_abbreviations):
+            self.impurities_concentrations.extend(["nan"] * (len(self.impurities_abbreviations) - len(self.impurities_concentrations)))   
+        if len(self.impurities_mass_fractions) < len(self.impurities_abbreviations):
+            self.impurities_mass_fractions.extend(["nan"] * (len(self.impurities_abbreviations) - len(self.impurities_mass_fractions))) 
 
     def clean_coefficients(self, coefficients):
         "Ensure proper formatting of the coefficients"
@@ -195,33 +219,34 @@ class PerovskiteToJson:
             "composition_estimate": self.composition_estimate,
             "sample_type": self.sample_type,
             "dimensionality": self.dimensionality,
-            "bandgap": self.bandgap,     
+            "band_gap": self.bandgap,     
         }
         
         # Remove empty values
         perovskite_data = {key: value for key, value in perovskite_data.items() if value not in ["", "nan", pd.isna(value)]} 
         
         if len(self.a_ions) > 0:
-            perovskite_data["a_ions"] = self.a_ions
+            perovskite_data["ions_a_site"] = self.a_ions
         if len(self.b_ions) > 0:
-            perovskite_data["b_ions"] = self.b_ions
+            perovskite_data["ions_b_site"] = self.b_ions
         if len(self.x_ions) > 0:
-            perovskite_data["x_ions"] = self.x_ions       
+            perovskite_data["ions_x_site"] = self.x_ions       
         if len(self.additives) > 0:
-            perovskite_data["additives_and_impurities"] = self.additives
+            perovskite_data["additives"] = self.additives
+        if len(self.impurities) > 0:
+            perovskite_data["impurities"] = self.impurities
         
         # Convert to json
         return json.dumps(perovskite_data, indent=4)
 
-    def format_additives_with_complementary_data(self, additives, abbreviations, reference_data, function, concentration, concentration_metric):
+    def format_additives_with_complementary_data(self, additives, abbreviations, reference_data, concentration, mass_fraction):
         ""
         for i, element in enumerate(abbreviations):
             additives.append(self.get_additive_complementary_data(
                 element, 
                 additive_data=reference_data, 
-                additive_function = function[i],
                 additive_conc = concentration[i],
-                additive_conc_met = concentration_metric[i],
+                additive_mass_fraction = mass_fraction[i],
                 ))  
 
     def format_list_of_numbers(self, num_list):
@@ -282,27 +307,34 @@ class PerovskiteToJson:
         
         return itemlist
 
-    def get_additive_complementary_data(self, abbreviation, additive_data, additive_conc, additive_function, additive_conc_met):
+    def get_additive_complementary_data(self, abbreviation, additive_data, additive_conc, additive_mass_fraction):
         "Get complementary data about additives and impurities from file"
         data_dict = {}
 
         # Get data
-        data_dict["function"] = additive_function
         data_dict["abbreviation"] = abbreviation
         data_dict["concentration"] = additive_conc
-        data_dict["concentration_metric"] = additive_conc_met
+        data_dict["mass_fraction"] = additive_mass_fraction
         data_dict["molecular_formula"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="Molecular_formula")
-        data_dict["smile"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="SMILE")
+        data_dict["smiles"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="SMILE")
         data_dict["common_name"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="Common_name")
         data_dict["iupac_name"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="IUPAC_name")
         data_dict["cas_number"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="CAS")       
-        data_dict["source_compound_smile"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="Parent_SMILE")
+        data_dict["source_compound_smiles"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="Parent_SMILE")
         data_dict["source_compound_iupac_name"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="Parent_IUPAC")
         data_dict["source_compound_cas_number"] = self.get_data_from_ion_datatables(abbreviation, additive_data, column="Parent_CAS")
+    
+        if not isinstance(data_dict["concentration"], str):
+            if math.isnan(data_dict["concentration"]):
+                data_dict["concentration"] = "nan"
+
+        if not isinstance(data_dict["mass_fraction"], str):
+            if math.isnan(data_dict["mass_fraction"]):
+                data_dict["mass_fraction"] = "nan"            
         
         # Remove keys with "nan" values
-        data_dict = {key: value for key, value in data_dict.items() if value not in ["", "nan", pd.isna(value)]}   
-        
+        data_dict = {key: value for key, value in data_dict.items() if value not in ["", "nan", "NaN", pd.isna(value)]}   
+                
         return data_dict
 
     def get_data_from_ion_datatables(self, ion, ion_data, column):
@@ -331,16 +363,16 @@ class PerovskiteToJson:
         data_dict["coefficient"] = coef
         # data_dict["ion_type"] = type
         data_dict["molecular_formula"] = self.get_data_from_ion_datatables(ion, ion_data, column="Molecular_formula")
-        data_dict["smile"] = self.get_data_from_ion_datatables(ion, ion_data, column="SMILE")
+        data_dict["smiles"] = self.get_data_from_ion_datatables(ion, ion_data, column="SMILE")
         data_dict["common_name"] = self.get_data_from_ion_datatables(ion, ion_data, column="Common_name")
         data_dict["iupac_name"] = self.get_data_from_ion_datatables(ion, ion_data, column="IUPAC_name")
         data_dict["cas_number"] = self.get_data_from_ion_datatables(ion, ion_data, column="CAS")       
-        data_dict["source_compound_smile"] = self.get_data_from_ion_datatables(ion, ion_data, column="Parent_SMILE")
+        data_dict["source_compound_smiles"] = self.get_data_from_ion_datatables(ion, ion_data, column="Parent_SMILE")
         data_dict["source_compound_iupac_name"] = self.get_data_from_ion_datatables(ion, ion_data, column="Parent_IUPAC")
         data_dict["source_compound_cas_number"] = self.get_data_from_ion_datatables(ion, ion_data, column="Parent_CAS")
         
         # Remove keys with "nan" values
-        data_dict = {key: value for key, value in data_dict.items() if value != "nan"} 
+        data_dict = {key: value for key, value in data_dict.items() if value != "nan"}
         
         return data_dict
 
@@ -450,43 +482,55 @@ class PerovskiteToJson:
 # Basic check        
 if __name__ == "__main__":     
     # Path to where to save data
-    path_json_file = os.path.join(os.getcwd(), "test.json") 
+    path_json_file = os.path.join(os.getcwd(), "composition_standard_perovskite.json") 
     # path_json_file = os.path.join(path_json_files, "test.json")
 
     # Test data
     composition_estimate = "Estimated from precursor solutions"
     sample_type = "Polycrystalline film"
-    dimensionality = "2D"
-    bandgap = 2.38
+    dimensionality = "3D"
+    bandgap = 1.55
 
 
-    # a_ions_abbreviations = ["Cs", "MA", "FA "]
-    # a_coefficients = [0.05, 0.79, 0.18]
-    # b_ions_abbreviations = ["Pb"]
-    # b_coefficients = [1]
-    # x_ions_abbreviations = ["Br", "I"]
-    # x_coefficients = [0.5, 2.5]
-
-    # a_ions_abbreviations = ["Cs", "MA", "FA "]
-    # a_coefficients = [0.05, 0.79, 0.18]
-    # b_ions_abbreviations = []
-    # b_coefficients = []
-    # x_ions_abbreviations = ["Br", "I"]
-    # x_coefficients = [0.5, 2.5]
-
-
-    a_ions_abbreviations = ["PEA"]
-    a_coefficients = [2]
+    a_ions_abbreviations = ["Cs", "MA", "FA "]
+    a_coefficients = [0.05, 0.79, 0.18]
     b_ions_abbreviations = ["Pb"]
     b_coefficients = [1]
-    x_ions_abbreviations = ["I"]
-    x_coefficients = ["4"]    
-    
-    additives_abbreviations = ["RbI", "Fe2+"]
-    additives_functions = ["Additive", "Impurity"]
-    additives_concentrations = [0.1, 0.001]
-    additives_conc_met = ["wt %", "mol %"]
+    x_ions_abbreviations = ["Br", "I"]
+    x_coefficients = [0.5, 2.5]
 
+    a_ions_abbreviations = ["Cs", "MA", "FA "]
+    a_coefficients = [0.05, 0.79, 0.18]
+    b_ions_abbreviations = []
+    b_coefficients = []
+    x_ions_abbreviations = ["Br", "I"]
+    x_coefficients = [0.5, 2.5]
+
+    additives_abbreviations = ["PbI2"]
+    additives_concentrations = []
+    additives_mass_fractions = [0.03]
+
+    impurities_abbreviations = []
+    impurities_concentrations = []
+    impurities_mass_fractions = []
+
+
+    # bandgap = 2.38
+    # dimensionality = "2D"
+    # a_ions_abbreviations = ["PEA"]
+    # a_coefficients = [2]
+    # b_ions_abbreviations = ["Pb"]
+    # b_coefficients = [1]
+    # x_ions_abbreviations = ["I"]
+    # x_coefficients = ["4"]    
+    
+    # additives_abbreviations = ["RbI"]
+    # additives_concentrations = []
+    # additives_mass_fractions = [0.001]
+
+    # impurities_abbreviations = ["Fe+2"]
+    # impurities_concentrations = [1e13]
+    # impurities_mass_fractions = []
 
     # Generate the composition object
     perovskite = PerovskiteToJson(
@@ -499,11 +543,13 @@ if __name__ == "__main__":
         b_ions_abbreviations=b_ions_abbreviations, 
         b_coefficients=b_coefficients, 
         x_ions_abbreviations=x_ions_abbreviations, 
-        x_coefficients=x_coefficients,
+        x_coefficients=x_coefficients,     
         additives_abbreviations = additives_abbreviations,
-        additives_functions = additives_functions,
         additives_concentrations = additives_concentrations,
-        additives_conc_met = additives_conc_met,
+        additives_mass_fractions = additives_mass_fractions,       
+        impurities_abbreviations = impurities_abbreviations,
+        impurities_concentrations = impurities_concentrations,
+        impurities_mass_fractions = impurities_mass_fractions,                  
         path_to_reference_data='local', 
         save_path=path_json_file)
     

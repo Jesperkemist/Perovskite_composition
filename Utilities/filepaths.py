@@ -25,7 +25,7 @@ def paths_to_data(origin="local"):
         path_data_ion_folder = os.path.join(os.getcwd(), "Data_ions")
         path_a_ions = os.path.join(path_data_ion_folder, "A-ion_data.xlsx")
         path_b_ions = os.path.join(path_data_ion_folder, "B-ion_data.xlsx")
-        path_x_ions = os.path.join(path_data_ion_folder, "C-ion_data.xlsx")
+        path_x_ions = os.path.join(path_data_ion_folder, "X-ion_data.xlsx")
         path_additives_and_impurities = os.path.join(path_data_ion_folder, "additives_and_impurities.xlsx")
         
         return path_a_ions, path_b_ions, path_x_ions, path_additives_and_impurities
