@@ -214,6 +214,7 @@ class PerovskiteToJson:
         
         # Combine data into a dictionary
         perovskite_data = {
+            "m_def":"perovskite_solar_cell_database.composition.PerovskiteComposition",     # For NOMAD compatibility
             "long_form": self.long_form,
             "short_form": self.short_form,
             "composition_estimate": self.composition_estimate,
@@ -236,8 +237,13 @@ class PerovskiteToJson:
         if len(self.impurities) > 0:
             perovskite_data["impurities"] = self.impurities
         
+        # Add a top level named data
+        data = {
+            "data": perovskite_data
+        }    
+        
         # Convert to json
-        return json.dumps(perovskite_data, indent=4)
+        return json.dumps(data, indent=4)
 
     def format_additives_with_complementary_data(self, additives, abbreviations, reference_data, concentration, mass_fraction):
         ""
