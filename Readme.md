@@ -6,14 +6,14 @@ Or How to Keep Track of Close to 300 Organic Ions Used in Hybrid Perovskites
 in ...
 
 ## Resources
-*The file **perovskite_composition_schema.json** defines the data schema for perovskite compositions
-*The file **ion_schema.json** defines the data schema for perovskite ions 
-*The folder **Data_ions** contains excel files with data for all perovskite ions identified in the projects.
-*The folder **Perovskite composition files** contains example files of perovskite composition files
-*The file **perovskite_to_json.py** contains the class PerovskiteToJson with functionality for converting perovskite data to a perovskite composition json file.
-*The file **GUI_perovskite_to_json.py** is a graphical user interface  for simplified data entry and for converting data to a perovskite composition json file 
-*The file **demo_notebook.ipynb** demonstrates how to format the required data in order to be able to convert it to a perovskite composition json file
-*The file **demo_notebook_NOMAD.ipynb** demonstrates how to access and manipulate data for perovskite compositions and perovskite ions stored in the NOMAD database
+* The file **perovskite_composition_schema.json** defines the data schema for perovskite compositions
+* The file **ion_schema.json** defines the data schema for perovskite ions 
+* The folder **Data_ions** contains excel files with data for all perovskite ions identified in the projects.
+* The folder **Perovskite composition files** contains example files of perovskite composition files
+* The file **perovskite_to_json.py** contains the class PerovskiteToJson with functionality for converting perovskite data to a perovskite composition json file.
+* The file **GUI_perovskite_to_json.py** is a graphical user interface  for simplified data entry and for converting data to a perovskite composition json file 
+* The file **demo_notebook.ipynb** demonstrates how to format the required data in order to be able to convert it to a perovskite composition json file
+* The file **demo_notebook_NOMAD.ipynb** demonstrates how to access and manipulate data for perovskite compositions and perovskite ions stored in the NOMAD database
 
 ## Requirements
 The scripts have been tested on Windows 11 running python 3.11
