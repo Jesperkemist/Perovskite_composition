@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json",
+    "$id": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/v1.0.0/ion_schema.json",
     "type": "object",
     "properties": {
         "abbreviation": {
