@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/perovskite_composition_schema.json",
+    "$id": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/v1.0.0/perovskite_composition_schema.json",
     "$defs": {
         "ion": {
             "allOf": [{"$ref": "https://raw.githubusercontent.com/Jesperkemist/Perovskite_composition/refs/heads/main/ion_schema.json"}],
