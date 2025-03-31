@@ -125,21 +125,21 @@
             "examples": [1.63],
             "unit": "eV"
         },
-        "a_ions": {
+        "ions_a_site": {
             "type": "array",
             "description": "A list of dictionaries on the form [{key_1: value_1, key_2: value_2, …}, {key_1: value_1,  …}, …]. Each element in the list represents one A-site ion in the perovskite structure. Each ion is given its own dictionary with the keys listed below.",
             "items": {
                 "$ref": "#/$defs/ion"
             }
         },
-        "b_ions": {
+        "ions_b_site": {
             "type": "array",
             "description": "Same structure as the a_ions",
             "items": {
                 "$ref": "#/$defs/ion"
             }
         },
-        "x_ions": {
+        "ions_x_site": {
             "type": "array",
             "description": "Same structure as the a_ions",
             "items": {
@@ -162,8 +162,8 @@
         }
     },
     "required": [
-        "a_ions",
-        "b_ions",
-        "x_ions"
+        "ions_a_site",
+        "ions_b_site",
+        "ions_x_site"
     ]
 }
