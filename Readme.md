@@ -34,3 +34,6 @@ Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x1
 
 This code is licensed under the terms of the [Creative Commons Attribution 4.0 International
 License](http://creativecommons.org/licenses/by/4.0/).
+
+## On Zenodo
+[![DOI](https://zenodo.org/badge/874639933.svg)](https://doi.org/10.5281/zenodo.16895004)
