@@ -1,5 +1,3 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16895005.svg)](https://doi.org/10.5281/zenodo.16895005)
-
 ## About The Project
 This repo is associated to a paper with the title:
 
