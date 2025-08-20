@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+title: Perovskite Composition Schemas
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Jesper
+    family-names: Jacobsson
+    orcid: 'https://orcid.org/0000-0002-4317-2879'
+  - given-names: Hampus
+    family-names: Näsström
+    orcid: 'https://orcid.org/0000-0002-3264-1692'
+doi: 10.5281/zenodo.16895004
+repository-code: 'https://github.com/Jesperkemist/Perovskite_composition'
+url: 'https://github.com/Jesperkemist/Perovskite_composition'
+abstract: >-
+  This software provides a JSON schema for perovskite ions and one for compositions.
+  In addition, it includes a set of python scripts for generating valid JSON files both
+  programmatically and graphically.
+license: Apache-2.0
